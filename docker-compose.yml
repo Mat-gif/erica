@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  erica-app:
+    build:
+      context: ./erica-app
+      dockerfile: Dockerfile
+    ports:
+      - "8080:5173"
+    volumes:
+      - ./erica-app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
