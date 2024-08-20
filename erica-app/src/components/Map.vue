@@ -8,7 +8,12 @@ import 'ol/ol.css';
 import Map from 'ol/Map';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import {initializeMap, pointPosition} from "@/services/mapService";
+import {initializeMap} from "@/services/mapService";
+
+import { Feature } from 'ol';
+import {Geometry, Point} from "ol/geom";
+import {fromLonLat} from "ol/proj";
+import {Icon, Style} from "ol/style";
 
 const props = defineProps<{
   geojsonData: any;
@@ -22,15 +27,31 @@ onMounted(() => {
   if (mapContainer.value) {
     map.value = initializeMap(mapContainer.value);
     const vectorLayer = map.value.getLayers().item(1) as VectorLayer<VectorSource>;
-    vectorSource.value = vectorLayer.getSource() as VectorSource;
+    vectorSource.value = vectorLayer.getSource() as VectorSource<Feature<Geometry>>;
+
   }
 });
 
 watch(
     () => props.geojsonData,
     (newGeojsonData) => {
-      if (newGeojsonData && vectorSource.value && map.value) {
-        pointPosition(newGeojsonData.geometry.coordinates, vectorSource.value, map.value);
+      if (newGeojsonData && vectorSource.value && map.value ) {
+        const point = new Feature({
+          geometry: new Point(fromLonLat(newGeojsonData.geometry.coordinates)),
+        });
+
+        const iconStyle = new Style({
+          image: new Icon({
+            src: '/hurricane2.svg',
+            scale: 1,
+          }),
+        });
+
+        point.setStyle(iconStyle);
+
+        vectorSource.value.clear(); // Efface les anciens points
+        vectorSource.value.addFeature(point); // Ajoute le nouveau point
+        map.value.getView().setCenter(fromLonLat(newGeojsonData.geometry.coordinates)); // Recentre
       }
     },
     { deep: true }
