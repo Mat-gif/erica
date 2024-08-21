@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid p-4 w-75">
+    <Info   class="w-100 mb-4 mt-4" :geojsonData="geojsonData"/>
     <Map class="w-100" :geojsonData="geojsonData"/>
     <Slider
         class="w-100 mb-4 mt-4"
@@ -7,8 +8,7 @@
         :max="max"
         :formatTooltip="formatTooltip"
         @update:value="handleValueChanged"
-    />
-  </div>
+    /></div>
 </template>
 
 <script setup lang="ts">
@@ -17,6 +17,7 @@ import Map from "@/components/Map.vue";
 import Slider from "@/components/Slider.vue";
 import { getformatTooltip } from '@/services/tooltipService';
 import {fetchGeojsonData} from "@/services/dataService";
+import Info from "@/components/Info.vue";
 
 const value = ref(0);
 const geojsonData = ref<any>(null);
@@ -25,7 +26,7 @@ const max = computed(() => allGeojsonData.value.length - 1);
 
 onMounted(async () => {
   const url = '/data/erica_points.geojson';
-  allGeojsonData.value = await fetchGeojsonData(url);
+  allGeojsonData.value = (await fetchGeojsonData(url)).features;
   geojsonData.value = allGeojsonData.value[value.value];
 });
 
