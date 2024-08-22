@@ -1,4 +1,3 @@
-// src/services/mapServices.ts
 
 import Map from 'ol/Map';
 import View from 'ol/View';
@@ -8,10 +7,9 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import {Icon, Stroke, Style} from "ol/style";
 import type {GeoJSONFeature, GeoJSONFeatureCollection} from "ol/format/GeoJSON";
-import {fromLonLat} from "ol/proj";
-import type {Coordinate} from "ol/coordinate";
 
 
+// initialise la map avec le fond de carte
 export function initializeMap(mapContainer: HTMLElement): Map {
     return new Map({
         target: mapContainer,
@@ -30,7 +28,7 @@ export function initializeMap(mapContainer: HTMLElement): Map {
     });
 }
 
-
+// style du point en se basant sur un .svg
 export const pointStyle = () => {
     return new Style({
         image: new Icon({
@@ -40,6 +38,7 @@ export const pointStyle = () => {
     });
 };
 
+// style de la trajectoire
 export const trajectoryStyle = () => {
     return new Style({
         stroke: new Stroke({
@@ -49,6 +48,7 @@ export const trajectoryStyle = () => {
     });
 };
 
+// formatage sous dans un tableau des coordonnées
 export const getTrajectoryCoordinates = (allGeojsonData:GeoJSONFeatureCollection )=>{
     return allGeojsonData.features.flatMap((feature: GeoJSONFeature) => {
         if (feature.geometry.type === 'MultiLineString') {

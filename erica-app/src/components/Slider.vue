@@ -12,6 +12,9 @@
 </template>
 
 <script setup lang="ts">
+/*
+ * Slider pour controler la date et donc déplacer la position du point
+ */
 import { defineProps, defineEmits, ref, watch } from 'vue';
 import Slider from '@vueform/slider';
 
@@ -30,6 +33,7 @@ const props = defineProps({
   }
 });
 
+// definir un evenement pour transmettre au composant parent l'index
 const emit = defineEmits(['update:value']);
 
 const localValue = ref(props.value);

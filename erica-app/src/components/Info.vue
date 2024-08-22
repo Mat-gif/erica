@@ -14,7 +14,10 @@
   </div>
 </template>
 
-<script setup lang="ts"> 
+<script setup lang="ts">
+/*
+ * Affiche des informations sur le cyclone a une date donnée dans un dropdown
+ */
 
 import type {GeoJSONFeature} from "ol/format/GeoJSON";
 

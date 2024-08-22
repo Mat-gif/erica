@@ -1,3 +1,4 @@
+// configure l'affichage de la date dans le tooltype du slider
 export function getformatTooltip(val: number, geojsonData: any[]): string {
     if (geojsonData.length > 0) {
         return new Date(geojsonData[Math.round(val)]["properties"]["ISO_TIME"]).toLocaleString('fr-FR', {

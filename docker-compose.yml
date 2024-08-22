@@ -1,14 +1,19 @@
+
+
 version: '3'
 
 services:
   erica-app:
     build:
       context: ./erica-app
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
-      - "8080:5173"
-    volumes:
-      - ./erica-app:/app
-      - /app/node_modules
+      - "8080:80"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+    restart: always

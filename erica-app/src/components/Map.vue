@@ -3,6 +3,10 @@
 </template>
 
 <script setup lang="ts">
+/*
+ * Utilise OpenLayers pour afficher une carte avec une trajectoire et un point dynamique.
+ */
+
 import { ref, watch, onMounted } from 'vue';
 import 'ol/ol.css';
 import Map from 'ol/Map';
@@ -30,54 +34,61 @@ const pointFeature = ref<Feature<Point> | null>(null);
 const trajectoryFeature = ref<Feature<MultiLineString> | null>(null);
 
 onMounted(async () => {
+  // initialisation de la map
   if (mapContainer.value) {
     map.value = initializeMap(mapContainer.value);
-
     const vectorLayer = map.value.getLayers().item(1) as VectorLayer<VectorSource<Feature<Geometry>>>;
     vectorSource.value = vectorLayer.getSource() as VectorSource<Feature<Geometry>>;
 
+    // chargement des données pour la trajectoire
     allGeojsonData.value = await fetchGeojsonData('/data/erica_track.geojson') as GeoJSONFeatureCollection;
+
+    // formatage des données
     const trajectoryCoordinates = getTrajectoryCoordinates(allGeojsonData.value);
+    const transformedCoordinates: Coordinate[][] = trajectoryCoordinates.map(line =>
+        line.map(coord => fromLonLat(coord))
+    );
 
-      const transformedCoordinates: Coordinate[][] = trajectoryCoordinates.map(line =>
-          line.map(coord => fromLonLat(coord))
-      );
-
-      if (transformedCoordinates.length > 0) {
-        trajectoryFeature.value = new Feature({
-          geometry: new MultiLineString(transformedCoordinates),
-        });
-
-        if (trajectoryFeature.value) {
-          trajectoryFeature.value.setStyle(trajectoryStyle);
-          vectorSource.value.addFeature(trajectoryFeature.value as Feature<MultiLineString>);
-        }
+    // ajout de la trajectoire globale
+    if (transformedCoordinates.length > 0) {
+      trajectoryFeature.value = new Feature({
+        geometry: new MultiLineString(transformedCoordinates),
+      });
+      if (trajectoryFeature.value) {
+        trajectoryFeature.value.setStyle(trajectoryStyle);
+        vectorSource.value.addFeature(trajectoryFeature.value as Feature<MultiLineString>);
       }
     }
+  }
 });
+
 
 watch(
     () => props.geojsonData,
     (newGeojsonData) => {
+      // generation du nouveau point dynamiquement
       if (newGeojsonData && vectorSource.value && map.value) {
         const geoJSONFormat = new GeoJSON();
         const feature = geoJSONFormat.readFeature(newGeojsonData);
         if (feature instanceof Feature) {
           const geometry = feature.getGeometry();
 
+          // creer un nouveau point
           if (geometry instanceof Point) {
             const point = new Feature({
               geometry: new Point(fromLonLat(geometry.getCoordinates())),
             });
             point.setStyle(pointStyle);
 
+            // suppression de l'ancien sans supprimer la trajectoire
             if (pointFeature.value) {
               vectorSource.value.removeFeature(pointFeature.value  as Feature<Point>);
             }
 
+            // ajout du nouveau point + recentrer la map
             pointFeature.value = point;
             vectorSource.value.addFeature(pointFeature.value  as Feature<Point>);
-            map.value.getView().setCenter(fromLonLat(geometry.getCoordinates())); // Recentre
+            map.value.getView().setCenter(fromLonLat(geometry.getCoordinates()));
           }
         }
       }
