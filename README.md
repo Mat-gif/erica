@@ -8,11 +8,15 @@ Votre mission consiste à développer une application web pour visualiser la tra
     ```bash
     git clone https://github.com/Mat-gif/erica.git
     ```
-2. Construisez le conteneur :
+2. Naviguer dans le répertoire erica :
+      ```bash
+    cd erica
+    ```
+3. Construisez le conteneur :
     ```bash
     sudo docker-compose up --build
     ```
-3. Accédez au site à l'adresse suivante :
+4. Accédez au site à l'adresse suivante :
     [http://localhost:8080/](http://localhost:8080/)
 
 ## Technologies Utilisées
