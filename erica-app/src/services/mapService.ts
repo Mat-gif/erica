@@ -22,7 +22,7 @@ export function initializeMap(mapContainer: HTMLElement): Map {
             }),
         ],
         view: new View({
-            center: [16755203.32, -1679201.48], // Le Pacifique Sud-Est
+            center: [16755203.32, -1679201.48], // Le Pacifique Sud-ouest
             zoom: 4,
         }),
     });
