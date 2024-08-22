@@ -36,4 +36,4 @@ Votre mission consiste à développer une application web pour visualiser la tra
 
 ## Aperçu de l'Application
 
-![Aperçu de l'application](chemin/vers/p.png)
+![Aperçu de l'application](erica-app.png)
