@@ -34,4 +34,6 @@ Votre mission consiste à développer une application web pour visualiser la tra
 
 9 heures
 
+## Aperçu de l'Application
 
+![Aperçu de l'application](chemin/vers/p.png)
