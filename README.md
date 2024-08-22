@@ -24,7 +24,7 @@ Votre mission consiste à développer une application web pour visualiser la tra
 
 ## Analyse
 
-- Afficher une carte centrée sur le Pacifique Sud-Est
+- Afficher une carte centrée sur le Pacifique Sud-Ouest
 - Afficher la trajectoire complète du cyclone
 - Afficher un point dynamique pour représenter la position actuelle du cyclone
 - Utiliser un slider pour permettre à l'utilisateur de déplacer dans le temps la position du point dynamique
